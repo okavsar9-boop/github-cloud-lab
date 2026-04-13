@@ -2,36 +2,41 @@ name: Ominakavsar_CI_Workflow
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   pull_request:
-    branches: ["main"]
+    branches: [main]
 
 jobs:
-  validation:
+  test:
     name: Code Validation
     runs-on: ubuntu-latest
+
     steps:
-      - name: Fetch Code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Python Environment Setup
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Dependency Injection
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Execute Tests
-        run: python3 -m pytest tests/ --tb=line
+      - name: Run tests with pytest
+        run: python -m pytest tests/ -v --tb=short
 
-  container-build:
+  build-docker:
     name: Docker Image Verification
     runs-on: ubuntu-latest
-    needs: [validation]
+    needs: test
+
     steps:
-      - name: Fetch Code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Local Image
-        run: docker build -t cloud-lab-omina:${{ github.run_id }} .
+      - name: Build Docker image
+        run: docker build -t github-cloud-lab:${{ github.sha }} .
+
+      - name: Verify image exists
+        run: docker image ls github-cloud-lab
