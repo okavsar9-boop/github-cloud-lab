@@ -1,18 +1,16 @@
-"""
-Ominakavsar's Calculator Module
-Numeric operations for cloud-based arithmetic.
-"""
+def add(a, b):
+    return a + b
 
-def add(a: float, b: float) -> float:
-    return float(a + b)
 
-def subtract(a: float, b: float) -> float:
-    return float(a - b)
+def subtract(a, b):
+    return a - b
 
-def multiply(a: float, b: float) -> float:
-    return float(a * b)
 
-def divide(a: float, b: float) -> float:
+def multiply(a, b):
+    return a * b
+
+
+def divide(a, b):
     if b == 0:
-        raise ValueError("Division by zero is mathematically undefined.")
-    return float(a / b)
+        raise ValueError("Cannot divide by zero")
+    return a / b
